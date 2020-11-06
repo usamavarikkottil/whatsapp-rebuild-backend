@@ -1,10 +1,20 @@
-POST http://localhost:5000/group/5fa11fcb3a41210630e6ab81/addmember
+POST http://localhost:5000/user/5fa1762db7b6b9083f2e1f79/delete
 Content-type: application/json
 
 {
-    "userId" : "5fa1762db7b6b9083f2e1f79"
+    "fullName": "Jabathya varikkottil",
+    "mobileNumber": 95447618487,
+    "status": "Busy", 
+    "photoUrl":"https://www.google.com"
+
 }
 
 ###
 
-GET http://localhost:5000/user/usErS/
+POST http://localhost:5000/group/5fa1220879b27f06b28cc710/delete
+Content-type: application/json
+
+{
+
+    "photoUrl": "https://www.usama.com"
+}

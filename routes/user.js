@@ -1,7 +1,7 @@
 const router = require("express").Router();
 let User = require("../models/user.model");
 
-router.route("/new").post((req, res) => {
+router.route("/create").post((req, res) => {
     const fullName = req.body.fullName;
     const mobileNumber = req.body.mobileNumber;
     const status = req.body.status ;
@@ -16,6 +16,41 @@ router.route("/new").post((req, res) => {
     .catch(error => res.status(400).json({"success": "false", "message": error.message}))
 
 })
+
+router.route("/:id/update").post((req, res) => { // change to user/update - passportjs
+    const fullName = req.body.fullName;
+    const mobileNumber = req.body.mobileNumber;
+    const status = req.body.status ;
+    const photoUrl = req.body.photoUrl;
+
+    User.findById(req.params.id, function (err, user) { // Change to req.user.id after passport integration
+        fullName && (user.fullName = fullName);
+        mobileNumber && (user.mobileNumber = mobileNumber);
+        status && (user.status = status);
+        photoUrl && (user.photoUrl = photoUrl);
+        user.save(function (err) {
+            if (err) {
+                res.json(err.message);
+            } else {
+                res.json({ "success": true, "message": "The user has updated successfully" });
+            }
+        })
+
+    })
+});
+
+router.route("/:id/delete").post((req, res) => { // change after passport implementation
+
+    User.findByIdAndRemove(req.params.id, function (err, user) {
+
+        console.log(user)
+        if (err) {
+            res.json(err.message);
+        } else {
+            res.json({ "success": true, "message": "The User account has deleted successfully" });
+        }
+    })
+});
 
 router.route("/users").get((req, res) => {
     User.find()
