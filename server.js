@@ -12,7 +12,7 @@ const userRoute = require("./routes/user");
 app.use(express.json());
 
 // DB connection
-mongoose.connect("mongodb://localhost:27017/whatsappDB", {useNewUrlParser: true,useCreateIndex: true});
+mongoose.connect("mongodb://localhost:27017/whatsappDB", {useNewUrlParser: true,useCreateIndex: true, useFindAndModify: false });
 const connection = mongoose.connection;
 connection.once('open', () => {console.log("MongoDB connection success :D ")});
 
