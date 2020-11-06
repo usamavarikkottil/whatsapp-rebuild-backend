@@ -5,7 +5,16 @@ const userSchema = new mongoose.Schema({
     mobileNumber: {type: Number, required: true},
     status: String,
     photoUrl: String,
-    groups: [groupSchema],
-    messages: [messageSchema]
+    groups: [{
+        default: null,
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Group'
+    }],
+    // messages: [messageSchema]
 
 })
+
+
+const User = new mongoose.model("User", userSchema);
+
+module.exports = User;

@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 const groupSchema = new mongoose.Schema({
     groupName: String,
     photoUrl: String,
-    // members: [userSchema],
+    members: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User'
+    }],
     // admins: [userSchema],
     // messages: [messageSchema]
 });

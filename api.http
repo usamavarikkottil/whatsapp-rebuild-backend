@@ -1,4 +1,10 @@
-POST http://localhost:5000/gfroup/newb
+POST http://localhost:5000/group/5fa11fcb3a41210630e6ab81/addmember
 Content-type: application/json
 
+{
+    "userId" : "5fa1762db7b6b9083f2e1f79"
+}
 
+###
+
+GET http://localhost:5000/user/usErS/

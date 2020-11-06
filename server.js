@@ -4,7 +4,9 @@ const http = require("http");
 const server = http.Server(app);
 const mongoose = require("mongoose");
 const io = require("socket.io");
+
 const groupRoute = require("./routes/group");
+const userRoute = require("./routes/user");
 
 
 app.use(express.json());
@@ -17,6 +19,7 @@ connection.once('open', () => {console.log("MongoDB connection success :D ")});
 
 // Routes
 app.use("/group", groupRoute);
+app.use("/user", userRoute);
 
 app.get("/", (req, res) => {
     res.send("GOod boy...")
