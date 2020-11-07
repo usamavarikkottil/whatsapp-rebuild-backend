@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
     status: String,
     photoUrl: String,
     groups: [{
-        default: null,
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Group'
     }],

@@ -2,6 +2,8 @@ const router = require("express").Router();
 let Group = require("../models/group.model");
 let User = require("../models/user.model");
 
+
+
 router.route("/groups").get((req, res) => {
     // console.log(req.user); undefined
     Group.find()
@@ -30,6 +32,17 @@ router.route("/create").post((req, res) => {
         .catch((err) => res.status(400).json(`Error ${err}`))
 });
 
+router.route("/:id").get((req, res) => {
+    Group.findById(req.params.id, function (err, group) {
+        if (err) {
+            res.status(500).json({ "success": "false", "message": err.message });
+        } else {
+
+            res.json(group);
+        }
+    })
+})
+
 router.route("/:id/update").post((req, res) => {
     const groupName = req.body.groupName;
     const photoUrl = req.body.photoUrl;
@@ -55,18 +68,53 @@ router.route("/:id/delete").post((req, res) => {
         if (err) {
             res.json(err.message);
         } else {
-            res.json({ "success": true, "message": "The group deleted successfully" });
+            User.groups.pull(req.params.id); // Remove group id from user's groups array.
+            User.save(function (err) {
+                if(err) {
+                    res.json({"success": "true", "message": err.message});
+                } else {
+
+                    res.json({ "success": true, "message": "The group deleted successfully" });
+                }
+            })
         }
     })
 });
 
 router.route("/:id/addmember").post((req, res) => {
-
     Group.findById(req.params.id, function (err, group) {
-        group.members.push(req.body.userId);
-        group.save(function (err) {
-            res.json("User added to the group succesfully");
-        })
+        if (err) {
+            res.status(500).json({ "success": "false", "message": err.message });
+        } else {
+
+
+            group.members.addToSet(req.body.userId);
+
+
+            group.save(function (err) {
+                if (err) {
+                    res.status(500).json({ "success": "false", "message": err.message });
+                } else {
+                    User.findById(req.body.userId, function (err, user) {
+                        if (err) {
+                            res.json({ "success": "false", "message": err.message });
+                        } else {
+
+                            user.groups.addToSet(req.params.id);
+                            user.save(function (err) {
+                                if (err) {
+                                    res.json({ "success": "false", "message": err.message })
+                                } else {
+                                    res.json({ "success": "true", "message": "User has been added to the group" });
+                                }
+                            });
+                        }
+                    })
+
+
+                }
+            })
+        }
     })
 
 })

@@ -1,4 +1,18 @@
-POST http://localhost:5000/user/5fa1762db7b6b9083f2e1f79/delete
+### Create new user account
+POST http://localhost:5000/user/create
+Content-type: application/json
+
+{
+    "fullName": "Jaba",
+    "mobileNumber": 95447618487,
+    "status": "Busy", 
+    "photoUrl":"https://www.google.com"
+
+}
+
+
+### Edit user profile
+POST http://localhost:5000/user/5fa172e55549c1081fae17e7/update
 Content-type: application/json
 
 {
@@ -9,12 +23,32 @@ Content-type: application/json
 
 }
 
-###
+### Delete user account
+POST http://localhost:5000/user/5fa6ac2964dfc1080b399aee/delete
+Content-type: application/json
 
-POST http://localhost:5000/group/5fa1220879b27f06b28cc710/delete
+
+
+### Create a new group
+POST http://localhost:5000/group/create
 Content-type: application/json
 
 {
 
-    "photoUrl": "https://www.usama.com"
+    "groupName": "new Group",
+    "photoUrl": "https://www.photo.com"
 }
+
+### Add member to group
+POST http://localhost:5000/group/5fa6ad15a57211084138d680/addmember
+Content-type: application/json
+
+{
+
+    "userId": "5fa6ace2a57211084138d67f"
+}
+
+
+### Delete Group 
+POST http://localhost:5000/group/5fa6ad15a57211084138d680/delete
+Content-type: application/json

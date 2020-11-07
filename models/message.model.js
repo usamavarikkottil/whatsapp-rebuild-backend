@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
     message: String,
-    photoUrl: String,
-    user: userSchema
+    sender: userSchema
     
 }, {timestamps: true});

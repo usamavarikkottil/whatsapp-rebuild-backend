@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Group = require("../models/group.model");
 let User = require("../models/user.model");
 
 router.route("/create").post((req, res) => {
@@ -24,6 +25,7 @@ router.route("/:id/update").post((req, res) => { // change to user/update - pass
     const photoUrl = req.body.photoUrl;
 
     User.findById(req.params.id, function (err, user) { // Change to req.user.id after passport integration
+        console.log(fullName);
         fullName && (user.fullName = fullName);
         mobileNumber && (user.mobileNumber = mobileNumber);
         status && (user.status = status);
@@ -43,11 +45,19 @@ router.route("/:id/delete").post((req, res) => { // change after passport implem
 
     User.findByIdAndRemove(req.params.id, function (err, user) {
 
-        console.log(user)
+        // console.log(user)
         if (err) {
-            res.json(err.message);
+            res.json({"success": "false", "message": err.message});
         } else {
-            res.json({ "success": true, "message": "The User account has deleted successfully" });
+            Group.members.pull(req.params.id); // Remove userid from group's members list
+            Group.save(function (err) {
+                if (err) {
+                    res.json({"success": "false", "message": err.message});
+                } else {
+
+                    res.json({ "success": true, "message": "The User account has deleted successfully" });
+                }
+            });
         }
     })
 });
