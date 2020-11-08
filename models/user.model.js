@@ -9,7 +9,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Group'
     }],
-    // messages: [messageSchema]
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Message'
+    }]
 
 })
 

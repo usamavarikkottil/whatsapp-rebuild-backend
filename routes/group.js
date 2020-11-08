@@ -101,4 +101,14 @@ router.route("/:id/addmember").post((req, res) => {
 
 })
 
+router.route("/:id/message/new").post((req, res) => {
+
+})
+
+router.route("/:id/message/").get((req, res) => {
+
+    
+})
+
+
 module.exports = router;
