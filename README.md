@@ -7,3 +7,9 @@ When Deleting a User account
     > Delete User ID from all groups.
 
 Socket.io on Server.
+
+Group -> addMember
+            -> Change findById to findByIdAndUpdate
+
+
+Return edited result on update in mongoose

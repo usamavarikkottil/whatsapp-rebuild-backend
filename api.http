@@ -3,20 +3,20 @@ POST http://localhost:5000/user/create
 Content-type: application/json
 
 {
-    "fullName": "Jaba",
-    "mobileNumber": 95447618487,
-    "status": "Busy", 
-    "photoUrl":"https://www.google.com"
+    "fullName": "Ferrari",
+    "mobileNumber": 35441345,
+    "status": "Free", 
+    "photoUrl":"https://www.ball.com"
 
 }
 
 
 ### Edit user profile
-POST http://localhost:5000/user/5fa172e55549c1081fae17e7/update
+POST http://localhost:5000/user/5fa7b8cde2908605dbaea28d/update
 Content-type: application/json
 
 {
-    "fullName": "Jabathya varikkottil",
+    "fullName": "Ferrari varikkottil",
     "mobileNumber": 95447618487,
     "status": "Busy", 
     "photoUrl":"https://www.google.com"
@@ -24,7 +24,7 @@ Content-type: application/json
 }
 
 ### Delete user account
-POST http://localhost:5000/user/5fa6ac2964dfc1080b399aee/delete
+POST http://localhost:5000/user/5fa7b8cde2908605dbaea28d/delete
 Content-type: application/json
 
 
@@ -35,20 +35,32 @@ Content-type: application/json
 
 {
 
-    "groupName": "new Group",
+    "groupName": "Ferrari",
     "photoUrl": "https://www.photo.com"
 }
 
 ### Add member to group
-POST http://localhost:5000/group/5fa6ad15a57211084138d680/addmember
+POST http://localhost:5000/group/5fa7b8ffe2908605dbaea28e/addmember
 Content-type: application/json
 
 {
 
-    "userId": "5fa6ace2a57211084138d67f"
+    "userId": "5fa7b8cde2908605dbaea28d"
 }
 
 
 ### Delete Group 
-POST http://localhost:5000/group/5fa6ad15a57211084138d680/delete
+POST http://localhost:5000/group/5fa7b8ffe2908605dbaea28e/delete
 Content-type: application/json
+
+
+
+### Edit Group Details
+POST http://localhost:5000/group/5fa7885f6fec9a02f37d6358/update
+Content-type: application/json
+
+{
+    "groupName": "Apple Boys",
+    "photoUrl":"https://www.applesgroup.com"
+
+}
