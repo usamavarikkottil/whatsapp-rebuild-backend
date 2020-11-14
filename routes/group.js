@@ -1,6 +1,7 @@
 const router = require("express").Router();
 let Group = require("../models/group.model");
 let User = require("../models/user.model");
+let Message = require("../models/message.model");
 
 
 
@@ -21,6 +22,25 @@ router.route("/groups").get((req, res) => {
     // .catch(error => res.status(400).json(error))
 })
 
+router.route("/:id/").get((req, res) => {
+    Group.findById(req.params.id)
+    .populate({
+        path : 'messages',
+        select:["message", "sender", "createdAt"],
+        populate : {
+          path : 'sender',
+          select : ["fullName", "mobileNumber", "status", "photoUrl"],
+        }
+      })
+    .exec(function (err, group) {
+        
+        if (err) res.status(500).json({ "success": "false", "message": err.message });
+        res.json(group);
+
+    })
+
+})
+
 router.route("/create").post((req, res) => {
     const { groupName, photoUrl } = req.body;
 
@@ -31,17 +51,6 @@ router.route("/create").post((req, res) => {
         .then((group) => res.json({ "success": true, "message": "The group has created successfully.", group }))
         .catch((err) => res.status(400).json(`Error ${err}`))
 });
-
-router.route("/:id").get((req, res) => {
-    Group.findById(req.params.id, function (err, group) {
-        if (err) {
-            res.status(500).json({ "success": "false", "message": err.message });
-        } else {
-
-            res.json(group);
-        }
-    })
-})
 
 router.route("/:id/update").post((req, res) => {
     const { groupName, photoUrl } = req.body;
@@ -103,12 +112,28 @@ router.route("/:id/addmember").post((req, res) => {
 
 router.route("/:id/message/new").post((req, res) => {
 
+
+    const group = req.params.id;
+    const { message, sender /*, receiver */ } = req.body;
+    const newMessage = new Message({ message, sender, receiver, group });
+    newMessage.save()
+        .then((message) => {
+            Group.findByIdAndUpdate(
+                group,
+                { "$addToSet": { "messages": message._id } },
+                { new: true },
+                function (err, group) {
+                    if (err) res.json({ "success": "false", "message": err.message });
+                    res.json({ "success": true, "response-message": "A message has been sent to the group.", message, group });
+                }
+            )
+            // console.log(message.id)
+
+        })
+        .catch((err) => res.status(400).json(`Error ${err}`))
+
 })
 
-router.route("/:id/message/").get((req, res) => {
-
-    
-})
 
 
 module.exports = router;

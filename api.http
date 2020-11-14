@@ -11,6 +11,19 @@ Content-type: application/json
 }
 
 
+### Show all users
+GET http://localhost:5000/user/users
+
+### Send a message to one User
+POST http://localhost:5000/user/5fa785b066007202a9b00819/message/new
+Content-Type: application/json
+
+{
+    "message": "Hai, My friend",
+    "sender": "5fa785ab66007202a9b00818"
+
+}
+
 ### Edit user profile
 POST http://localhost:5000/user/5fa7b8cde2908605dbaea28d/update
 Content-type: application/json
@@ -39,15 +52,29 @@ Content-type: application/json
     "photoUrl": "https://www.photo.com"
 }
 
+### Show all groups
+GET http://localhost:5000/group/groups
+
+
 ### Add member to group
-POST http://localhost:5000/group/5fa7b8ffe2908605dbaea28e/addmember
+POST http://localhost:5000/group/5fa7885f6fec9a02f37d6358/addmember
 Content-type: application/json
 
 {
 
-    "userId": "5fa7b8cde2908605dbaea28d"
+    "userId": "5fa785ab66007202a9b00818"
 }
 
+
+### Send a message to the group
+POST http://localhost:5000/group/5fa7885f6fec9a02f37d6358/message/new
+Content-Type: application/json
+
+{
+    "message": "Hai, Folks",
+    "sender": "5fa785ab66007202a9b00818"
+
+}
 
 ### Delete Group 
 POST http://localhost:5000/group/5fa7b8ffe2908605dbaea28e/delete

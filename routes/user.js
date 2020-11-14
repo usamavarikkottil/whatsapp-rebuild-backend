@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Group = require("../models/group.model");
 let User = require("../models/user.model");
+let Message = require("../models/message.model");
 
 router.route("/create").post((req, res) => {
     const { fullName, mobileNumber, status, photoUrl } = req.body;
@@ -22,7 +23,7 @@ router.route("/:id/update").post((req, res) => { // change to user/update - pass
     User.findByIdAndUpdate(
         req.params.id,
         { fullName, mobileNumber, status, photoUrl },
-        {new: true},
+        { new: true },
         function (err, user) {
             if (err) return res.status(400).json({ "success": "false", "message": err.message });
             res.json({ "success": true, "message": "The User account has been updated", user });
@@ -41,7 +42,7 @@ router.route("/:id/delete").post((req, res) => { // change after passport implem
         Group.updateMany(
             { "members": req.params.id },
             { "$pull": { "members": req.params.id } },
-            {new: true},
+            { new: true },
             function (err) {
                 if (err) res.json({ "success": "false", "message": err.message });
                 res.json({ "success": "true", "message": "The User has been deleted successfully", user });
@@ -54,6 +55,54 @@ router.route("/users").get((req, res) => {
     User.find()
         .then(users => res.json(users))
         .catch(error => res.status(400).json({ "success": "false", "message": error.message }))
+})
+
+router.route("/:id/").get((req, res) => /* change /:id route to  after passport implementation */
+{
+    User.findById(req.params.id)
+        .populate({
+            path: 'messages',
+            select: ["message", "receiver", "createdAt"],
+            populate: [{
+                path: 'receiver',
+                select: ["fullName", "mobileNumber", "status", "photoUrl"],
+            } , {
+                path: "sender",
+                select: ["fullName", "mobileNumber", "status", "photoUrl"]
+
+            }]
+        })
+        .exec(function (err, user) {
+
+            if (err) res.status(500).json({ "success": "false", "message": err.message });
+            res.json(user);
+
+        })
+
+})
+
+router.route("/:id/message/new").post((req, res) => {
+
+
+    const receiver = req.params.id;
+    const { message, sender/* , receiver */ } = req.body;
+    const newMessage = new Message({ message, sender, receiver/* , group */ });
+    newMessage.save()
+        .then((message) => {
+            User.updateMany(
+                {_id: {$in: [sender, receiver]}},
+                { "$addToSet": { "messages": message._id } },
+                { new: true },
+                function (err, users) {
+                    if (err) res.json({ "success": "false", "message": err.message });
+                    res.json({ "success": true, "response-message": "A message has been sent to the user.", message, users });
+                }
+            )
+            // console.log(message.id)
+
+        })
+        .catch((err) => res.status(400).json(`Error ${err}`))
+
 })
 
 module.exports = router;
