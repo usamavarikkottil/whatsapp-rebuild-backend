@@ -1,15 +1,26 @@
-### Create new user account
+### Create new user account | Register
 POST http://localhost:5000/user/create
 Content-type: application/json
 
 {
     "fullName": "Ferrari",
-    "mobileNumber": 35441345,
+    "password": "newPassword",
+    "username": 35441345,
     "status": "Free", 
     "photoUrl":"https://www.ball.com"
 
 }
 
+
+### Login to your user account | Login
+POST http://localhost:5000/user/login
+Content-type: application/json
+
+{
+    "password": "newPassword",
+    "username": 35441345
+
+}
 
 ### Show all users
 GET http://localhost:5000/user/users
@@ -57,7 +68,7 @@ GET http://localhost:5000/group/groups
 
 
 ### Add member to group
-POST http://localhost:5000/group/5fa7885f6fec9a02f37d6358/addmember
+POST http://localhost:5000/group/5fa788796fec9a02f37d635a/addmember
 Content-type: application/json
 
 {

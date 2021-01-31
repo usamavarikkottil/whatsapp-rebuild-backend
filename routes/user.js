@@ -2,19 +2,56 @@ const router = require("express").Router();
 const Group = require("../models/group.model");
 let User = require("../models/user.model");
 let Message = require("../models/message.model");
+const passport = require("passport");
+
+
+
 
 router.route("/create").post((req, res) => {
-    const { fullName, mobileNumber, status, photoUrl } = req.body;
+    const { fullName, username, status, photoUrl } = req.body;
 
-    const newUser = new User({ fullName, mobileNumber, status, photoUrl });
-    newUser.save()
-        .then((user) => {
+    const newUser = new User({ fullName, username, status, photoUrl });
+    // newUser.save()
+    //     .then((user) => {
 
-            res.json({ "success": "true", "message": "New User created successfully", user })
-        })
-        .catch(error => res.status(400).json({ "success": "false", "message": error.message }))
+    //         res.json({ "success": "true", "message": "New User created successfully", user })
+    //     })
+    //     .catch(error => res.status(400).json({ "success": "false", "message": error.message }))
+    User.register(newUser, req.body.password, (err, user) => {
+        if (err) {
+            res.status(401).json({
+                "success": "false", "message": err.message
+            })
+        } else {
+            passport.authenticate("local")(req, res, () => {
+                res.json({
+                    "success": "true", "message": "registration successfull"
+                });
+            });;
+        }
+    });
+
 
 })
+
+router.post("/login", (req, res) => {
+    const { username, password } = req.body;
+
+    const user = new User({ username, password });
+
+    req.login(user, (err) => {
+        if (err) {
+            res.status(401).json({
+                "success": "false", "message": err.message
+            })
+        } else {
+            passport.authenticate("local")(req, res, () => {
+                res.json({ "success": "true", "message": "login successfull" });
+            });
+        }
+    });
+});
+
 
 router.route("/:id/update").post((req, res) => { // change to user/update - passportjs
 
@@ -57,27 +94,34 @@ router.route("/users").get((req, res) => {
         .catch(error => res.status(400).json({ "success": "false", "message": error.message }))
 })
 
-router.route("/:id/").get((req, res) => /* change /:id route to  after passport implementation */
-{
-    User.findById(req.params.id)
-        .populate({
-            path: 'messages',
-            select: ["message", "receiver", "createdAt"],
-            populate: [{
-                path: 'receiver',
-                select: ["fullName", "mobileNumber", "status", "photoUrl"],
-            } , {
-                path: "sender",
-                select: ["fullName", "mobileNumber", "status", "photoUrl"]
+router.route("/:id/").get((req, res) => /* change /:id route to  after passport implementation */ {
+    if (req.isAuthenticated()) {
 
-            }]
-        })
-        .exec(function (err, user) {
+        User.findById(req.params.id)
+            .populate([{
+                path: 'messages',
+                select: ["message", "receiver", "createdAt"],
+                populate: [{
+                    path: 'receiver',
+                    select: ["fullName", "mobileNumber", "status", "photoUrl"],
+                }, {
+                    path: "sender",
+                    select: ["fullName", "mobileNumber", "status", "photoUrl"]
 
-            if (err) res.status(500).json({ "success": "false", "message": err.message });
-            res.json(user);
+                }]
+            },
+            {
+                path: "groups"
+            }])
+            .exec(function (err, user) {
 
-        })
+                if (err) res.status(500).json({ "success": "false", "message": err.message });
+                res.json(user);
+
+            })
+    } else {
+        res.json({ "success": "false" })
+    }
 
 })
 
@@ -90,7 +134,7 @@ router.route("/:id/message/new").post((req, res) => {
     newMessage.save()
         .then((message) => {
             User.updateMany(
-                {_id: {$in: [sender, receiver]}},
+                { _id: { $in: [sender, receiver] } },
                 { "$addToSet": { "messages": message._id } },
                 { new: true },
                 function (err, users) {
