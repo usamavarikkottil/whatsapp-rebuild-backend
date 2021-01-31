@@ -6,6 +6,14 @@ const passport = require("passport");
 
 
 
+router.get("/isAuthenticated", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("Authenticated");
+    } else {
+        res.send("Not Authenticated");
+    }
+})
+
 
 router.route("/create").post((req, res) => {
     const { fullName, username, status, photoUrl } = req.body;
