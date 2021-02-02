@@ -5,7 +5,6 @@ let Message = require("../models/message.model");
 const passport = require("passport");
 
 
-
 router.get("/isAuthenticated", (req, res) => {
     if (req.isAuthenticated()) {
         res.send("Authenticated");
@@ -15,50 +14,51 @@ router.get("/isAuthenticated", (req, res) => {
 })
 
 
-router.route("/create").post((req, res) => {
-    const { fullName, username, status, photoUrl } = req.body;
+// router.route("/create").post((req, res) => {
+//     const { fullName, username, status, photoUrl } = req.body;
 
-    const newUser = new User({ fullName, username, status, photoUrl });
-    // newUser.save()
-    //     .then((user) => {
+//     const newUser = new User({ fullName, username, status, photoUrl });
+//     // newUser.save()
+//     //     .then((user) => {
 
-    //         res.json({ "success": "true", "message": "New User created successfully", user })
-    //     })
-    //     .catch(error => res.status(400).json({ "success": "false", "message": error.message }))
-    User.register(newUser, req.body.password, (err, user) => {
-        if (err) {
-            res.status(401).json({
-                "success": "false", "message": err.message
-            })
-        } else {
-            passport.authenticate("local")(req, res, () => {
-                res.json({
-                    "success": "true", "message": "registration successfull"
-                });
-            });;
-        }
-    });
+//     //         res.json({ "success": "true", "message": "New User created successfully", user })
+//     //     })
+//     //     .catch(error => res.status(400).json({ "success": "false", "message": error.message }))
+//     User.register(newUser, req.body.password, (err, user) => {
+//         if (err) {
+//             res.status(401).json({
+//                 "success": "false", "message": err.message
+//             })
+//         } else {
+//             passport.authenticate("local")(req, res, () => {
+//                 res.json({
+//                     "success": "true", "message": "registration successfull"
+//                 });
+//             });;
+//         }
+//     });
 
 
-})
+// })
 
-router.post("/login", (req, res) => {
-    const { username, password } = req.body;
+// router.post("/login", (req, res) => {
+//     const { username, password } = req.body;
 
-    const user = new User({ username, password });
+//     const user = new User({ username, password });
 
-    req.login(user, (err) => {
-        if (err) {
-            res.status(401).json({
-                "success": "false", "message": err.message
-            })
-        } else {
-            passport.authenticate("local")(req, res, () => {
-                res.json({ "success": "true", "message": "login successfull" });
-            });
-        }
-    });
-});
+//     req.login(user, { session: false }, (err) => {
+//         if (err) {
+//             res.status(401).json({
+//                 "success": "false", "message": err.message
+//             })
+//         } else {
+//             passport.authenticate("local", { session: false })(req, res, () => {
+//                 const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET);
+//                 res.json({ user, token });
+//             });
+//         }
+//     });
+// });
 
 
 router.route("/:id/update").post((req, res) => { // change to user/update - passportjs

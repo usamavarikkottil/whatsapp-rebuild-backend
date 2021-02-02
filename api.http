@@ -1,19 +1,19 @@
 ### Create new user account | Register
-POST http://localhost:5000/user/create
+POST http://localhost:5000/account/create
 Content-type: application/json
 
 {
-    "fullName": "Ferrari",
+    "fullName": "2nd account",
     "password": "newPassword",
-    "username": 35441345,
-    "status": "Free", 
-    "photoUrl":"https://www.ball.com"
+    "username": 9876543210,
+    "status": "dev", 
+    "photoUrl":"https://www.dev.com"
 
 }
 
 
 ### Login to your user account | Login
-POST http://localhost:5000/user/login
+POST http://localhost:5000/account/login
 Content-type: application/json
 
 {
@@ -24,10 +24,11 @@ Content-type: application/json
 
 ### Show all users
 GET http://localhost:5000/user/users
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6OTg3NjU0MzIxMCwiaWQiOiI2MDE5MzY3ZWQwN2Y4YzAyZTg5MmM1OTUiLCJpYXQiOjE2MTIyNjUwODd9.FVSw2TItZ5sYJl914FlJ5JDrsRTZfyj_Cm-cuXt_450
 ### Send a message to one User
 POST http://localhost:5000/user/5fa785b066007202a9b00819/message/new
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6OTg3NjU0MzIxMCwiaWQiOiI2MDE5MzY3ZWQwN2Y4YzAyZTg5MmM1OTUiLCJpYXQiOjE2MTIyNjUwODd9.FVSw2TItZ5sYJl914FlJ5JDrsRTZfyj_Cm-cuXt_450
 
 {
     "message": "Hai, My friend",
@@ -56,16 +57,17 @@ Content-type: application/json
 ### Create a new group
 POST http://localhost:5000/group/create
 Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6OTg3NjU0MzIxMCwiaWQiOiI2MDE5MzY3ZWQwN2Y4YzAyZTg5MmM1OTUiLCJpYXQiOjE2MTIyNjUwODd9.FVSw2TItZ5sYJl914FlJ5JDrsRTZfyj_Cm-cuXt_450
 
 {
 
-    "groupName": "Ferrari",
-    "photoUrl": "https://www.photo.com"
+    "groupName": "new dev group",
+    "photoUrl": "https://www.group.com"
 }
 
 ### Show all groups
 GET http://localhost:5000/group/groups
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6OTg3NjU0MzIxMCwiaWQiOiI2MDE5MzY3ZWQwN2Y4YzAyZTg5MmM1OTUiLCJpYXQiOjE2MTIyNjUwODd9.FVSw2TItZ5sYJl914FlJ5JDrsRTZfyj_Cm-cuXt_450
 
 ### Add member to group
 POST http://localhost:5000/group/5fa788796fec9a02f37d635a/addmember
