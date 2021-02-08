@@ -5,13 +5,6 @@ let Message = require("../models/message.model");
 const passport = require("passport");
 
 
-router.get("/isAuthenticated", (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send("Authenticated");
-    } else {
-        res.send("Not Authenticated");
-    }
-})
 
 
 // router.route("/create").post((req, res) => {
